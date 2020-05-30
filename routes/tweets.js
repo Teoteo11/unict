@@ -25,7 +25,7 @@ router.get('/:id', function(req, res, next) {
     });
 });
 
-router.post('/', [
+router.post('/', autenticationMiddleware.isAuth, [
   check('tweet').isString().isLength({min: 1, max: 120})
 ], checkValidation, function(req, res, next) {
   const newTweet = new Tweet(req.body);
@@ -38,7 +38,7 @@ router.post('/', [
   });
 });
 
-router.put('/:id', [
+router.put('/:id', autenticationMiddleware.isAuth, [
   check('tweet').isString().isLength({min: 1, max: 120})
 ], checkValidation, function(req, res, next) {
   Tweet.findOne({_id: req.params.id}).exec(function(err, tweet) {
@@ -67,7 +67,7 @@ router.put('/:id', [
   });
 });
 
-router.delete('/:id', function(req, res, next) {
+router.delete('/:id', autenticationMiddleware.isAuth, function(req, res, next) {
   Tweet.findOne({_id: req.params.id}).exec(function(err, tweet) {
     if (err) {
       return res.status(500).json({
