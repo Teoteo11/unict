@@ -62,6 +62,45 @@ describe('[SHOW] GET: /users/:id', () => {
   });
 });
 
+describe('[UPDATE] PUT: /users', () => {
+  let createdUser = undefined;
+  beforeEach('Create user', async() => {
+    createdUser = await createUser();
+  })
+  afterEach('Delete user', async () => {
+    createdUser
+      ? await createdUser.remove()
+      : console.log('Missing document');
+  });
+  it('Update an exist user inside database and return it', async () => {
+    const updateUser = {
+      name: 'Rosario',
+      surname: 'Rossi',
+      email: 'rosario@gmail.com',
+      password: 'testUnictNew'
+    };
+    const result = await chai.request(app).put(`/users/${createdUser._id.toString()}`).send(updateUser);
+    expectJson(result);
+    expect(createdUser).to.be.not.undefined;
+    expect(result.status).to.be.equal(200);
+
+    const updatedUser = await User.findById(result.body._id);
+    expect(updatedUser).to.has.property('name', updateUser.name.toString());
+    expect(updatedUser).to.has.property('surname', updateUser.surname.toString());
+    expect(updatedUser).to.has.property('password', updateUser.password);
+    expect(updatedUser).to.has.property('email', updateUser.email.toString());
+  });
+  it('should return 404 status if user don\'t exists', async () => {
+    const newObjectId = mongoose.Types.ObjectId();
+    const result = await chai.request(app)
+        .put(`/users/${newObjectId}`);
+    expect(result.status).to.be.equal(404);
+    expectJson(result);
+    expect(result).to.have.property('body');
+    expect(result.body).to.be.deep.equals(expectedNotFoundError);
+  });
+});
+
 describe('[DELETE] DELETE: /:id', () => {
   it('should return 404 status if user don\'t exists', async () => {
     const newObjectId = mongoose.Types.ObjectId();
