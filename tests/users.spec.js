@@ -69,7 +69,7 @@ describe('[DELETE] DELETE: /:id', () => {
   it.skip('should return 404 status if user don\'t exists', async () => {
     const newObjectId = mongoose.Types.ObjectId();
     const result = await chai.request(app)
-        .delete(`/${newObjectId}`);
+        .delete(`/users/${newObjectId}`);
     expect(result.status).to.be.equal(404);
     expectJson(result);
     expect(result).to.have.property('body');
@@ -85,7 +85,7 @@ describe('[DELETE] DELETE: /:id', () => {
     });
     it('Delete existing user', async () => {
       const result = await chai.request(app)
-          .delete(`/${createdUser._id.toString()}`);
+          .delete(`/users/${createdUser._id.toString()}`);
       expect(result).to.have.property('status', 200);
       expect(result).to.have.property('body');
       expect(result.body).to.be.deep.equals({message: 'User successfully deleted'})

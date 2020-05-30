@@ -13,7 +13,9 @@ module.exports.createUser = async function() {
     name: 'Fabrizio',
     surname: 'Bianchi',
     email: 'fabrizio@gmail.com',
-    password: 'testUnict',
+    password: new Buffer(
+      crypto.createHash('sha256').update('testUnict', 'utf8').digest()
+    ).toString('base64'),
   };
   return await User.create(newUser);
 };

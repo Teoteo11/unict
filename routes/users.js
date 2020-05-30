@@ -50,12 +50,12 @@ router.post('/', [
 });
 
 router.put('/:id', function(request, response, next) {
-  if (response.locals.authInfo.userId !== request.params.id) {
-    return response.status(401).json({
-      error: "Unauthorized",
-      message: "You are not the owner of the resource"
-    });
-  }
+  // if (response.locals.authInfo.userId !== request.params.id) {
+  //   return response.status(401).json({
+  //     error: "Unauthorized",
+  //     message: "You are not the owner of the resource"
+  //   });
+  // }
   User.findOne({_id: request.params.id})
   .exec(function(err, user) {
     if(err) return response.status(500).json({error:err});
