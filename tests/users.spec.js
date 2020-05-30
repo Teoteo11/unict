@@ -4,7 +4,6 @@ const expect = chai.expect;
 const crypto = require('crypto');
 const app = require('../app');
 const User = require('../models/user');
-const crypto = require('crypto');
 
 const mongoose = require('mongoose');
 chai.use(chaiHttp);
@@ -78,34 +77,27 @@ describe('[UPDATE] PUT: /users', () => {
       name: 'Rosario',
       surname: 'Rossi',
       email: 'rosario@gmail.com',
-      password: new Buffer(
-      crypto.createHash('sha256').update('testUnictNew', 'utf8').digest()
-    ).toString('base64')
+      password: 'testUnictNew'
     };
-    const result = await chai.request(app).put(`/${createdUser._id.toString()}`).send(updateUser);
+    const result = await chai.request(app).put(`/users/${createdUser._id.toString()}`).send(updateUser);
     expectJson(result);
     expect(createdUser).to.be.not.undefined;
     expect(result.status).to.be.equal(200);
 
-    const updatedUser = await Users.findById(result.body._id);
+    const updatedUser = await User.findById(result.body._id);
     expect(updatedUser).to.has.property('name', updateUser.name.toString());
     expect(updatedUser).to.has.property('surname', updateUser.surname.toString());
-    expect(updatedUser).to.has.property('age', updateUser.age);
+    expect(updatedUser).to.has.property('password', updateUser.password);
     expect(updatedUser).to.has.property('email', updateUser.email.toString());
   });
-
-  it('Validation error if email filed is not an email', async () => {
-    const newUser = {
-      name: 'Rosario',
-      surname: 'Rossi',
-      email: 'email',
-      password: new Buffer(
-      crypto.createHash('sha256').update('testUnictNew', 'utf8').digest()
-    ).toString('base64')
-    };
-    const result = await chai.request(app).post(`/${createdUser._id.toString()}`).send(newUser);
+  it('should return 404 status if user don\'t exists', async () => {
+    const newObjectId = mongoose.Types.ObjectId();
+    const result = await chai.request(app)
+        .put(`/users/${newObjectId}`);
+    expect(result.status).to.be.equal(404);
     expectJson(result);
-    expect(result).to.has.property('status', 400);
+    expect(result).to.have.property('body');
+    expect(result.body).to.be.deep.equals(expectedNotFoundError);
   });
 });
 
