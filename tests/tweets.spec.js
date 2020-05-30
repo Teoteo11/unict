@@ -1,11 +1,13 @@
-const chai = require('chai')
-    , chaiHttp = require('chai-http');
-
-chai.use(chaiHttp);
 let mongoose = require("mongoose");
 let Tweet = require('../models/tweet');
-const app = require('../app');
 const should = chai.should();
+const chai = require('chai');
+const crypto = require('crypto');
+const chaiHttp = require('chai-http');
+const index = require('../routes/index')
+const expect = chai.expect;
+const app = require('../app')
+const User = require('../models/user');
 chai.use(chaiHttp);
 
 describe('Testing only negative responses for GETs of <<tweets>> route:\n', () => {
@@ -44,27 +46,4 @@ describe('Testing only negative responses for GETs of <<tweets>> route:\n', () =
             });
     });
 });
-    /*
-* Test the /POST route
-*/
-    //   describe('/POST book', () => {
-    //       it('it should not POST a book without pages field', (done) => {
-    //           let book = {
-    //               title: "The Lord of the Rings",
-    //               author: "J.R.R. Tolkien",
-    //               year: 1954
-    //           }
-    //         chai.request(server)
-    //             .post('/book')
-    //             .send(book)
-    //             .end((err, res) => {
-    //                   res.should.have.status(200);
-    //                   res.body.should.be.a('object');
-    //                   res.body.should.have.property('errors');
-    //                   res.body.errors.should.have.property('pages');
-    //                   res.body.errors.pages.should.have.property('kind').eql('required');
-    //               done();
-    //             });
-    //       });
 
-    //   });

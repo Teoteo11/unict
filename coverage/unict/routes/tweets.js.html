@@ -23,30 +23,54 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
+
                 <span class="strong">29.41% </span>
                 <span class="quiet">Statements</span>
                 <span class='fraction'>15/51</span>
+
+                <span class="strong">23.53% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>12/51</span>
+
             </div>
         
             
             <div class='fl pad1y space-right2'>
+
                 <span class="strong">4.17% </span>
                 <span class="quiet">Branches</span>
                 <span class='fraction'>1/24</span>
+
+                <span class="strong">0% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/24</span>
+
             </div>
         
             
             <div class='fl pad1y space-right2'>
+
                 <span class="strong">16.67% </span>
                 <span class="quiet">Functions</span>
                 <span class='fraction'>2/12</span>
+
+                <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/12</span>
+
             </div>
         
             
             <div class='fl pad1y space-right2'>
+
                 <span class="strong">31.91% </span>
                 <span class="quiet">Lines</span>
                 <span class='fraction'>15/47</span>
+
+                <span class="strong">25.53% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>12/47</span>
+
             </div>
         
             
@@ -165,9 +189,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -261,6 +291,7 @@ const autenticationMiddleware = require('../middlewares/auth');
 const { checkValidation } = require('../middlewares/validation');
 &nbsp;
 &nbsp;
+
 router.get('/', function (req, res, next) {
   Tweet.find().populate("_author", "-password").exec(function (err, tweets) {
     <span class="missing-if-branch" title="if path not taken" >I</span>if (err) <span class="cstat-no" title="statement not covered" >return res.status(500).json({ error: err });</span>
@@ -274,11 +305,27 @@ router.get('/:id', <span class="fstat-no" title="function not covered" >fu</span
     .exec(<span class="fstat-no" title="function not covered" >fu</span>nction (err, tweet) {
 <span class="cstat-no" title="statement not covered" >      if (err) <span class="cstat-no" title="statement not covered" >return res.status(500).json({ error: err });</span></span>
 <span class="cstat-no" title="statement not covered" >      if (!tweet) <span class="cstat-no" title="statement not covered" >return res.status(404).json({ message: 'Tweet not found' })</span></span>
+
+router.get('/', <span class="fstat-no" title="function not covered" >fu</span>nction(req, res, next) {
+<span class="cstat-no" title="statement not covered" >  Tweet.find().populate("_author", "-password").exec(<span class="fstat-no" title="function not covered" >fu</span>nction(err, tweets){</span>
+<span class="cstat-no" title="statement not covered" >    if (err) <span class="cstat-no" title="statement not covered" >return res.status(500).json({error: err});</span></span>
+<span class="cstat-no" title="statement not covered" >    res.json(tweets);</span>
+  });
+});
+&nbsp;
+router.get('/:id', <span class="fstat-no" title="function not covered" >fu</span>nction(req, res, next) {
+<span class="cstat-no" title="statement not covered" >  Tweet.findOne({_id: req.params.id})</span>
+    .populate("_author", "-password")
+    .exec(<span class="fstat-no" title="function not covered" >fu</span>nction(err, tweet){
+<span class="cstat-no" title="statement not covered" >      if (err) <span class="cstat-no" title="statement not covered" >return res.status(500).json({error: err});</span></span>
+<span class="cstat-no" title="statement not covered" >      if(!tweet) <span class="cstat-no" title="statement not covered" >return res.status(404).json({message: 'Tweet not found'})</span></span>
+
 <span class="cstat-no" title="statement not covered" >      res.json(tweet);</span>
     });
 });
 &nbsp;
 router.post('/', [
+
   check('tweet').isString().isLength({ min: 1, max: 120 })
 ], <span class="fstat-no" title="function not covered" >fu</span>nction (req, res, next) {
   const newTweet = <span class="cstat-no" title="statement not covered" >new Tweet(req.body);</span>
@@ -287,14 +334,30 @@ router.post('/', [
 <span class="cstat-no" title="statement not covered" >    if (err) {</span>
 <span class="cstat-no" title="statement not covered" >      return res.status(500).json({ error: err });</span>
     }
+
+  check('tweet').isString().isLength({min: 1, max: 120})
+], checkValidation, <span class="fstat-no" title="function not covered" >fu</span>nction(req, res, next) {
+  const newTweet = <span class="cstat-no" title="statement not covered" >new Tweet(req.body);</span>
+<span class="cstat-no" title="statement not covered" >  newTweet._author = res.locals.authInfo.userId;</span>
+<span class="cstat-no" title="statement not covered" >  newTweet.save(<span class="fstat-no" title="function not covered" >fu</span>nction(err){</span>
+<span class="cstat-no" title="statement not covered" >    if(err) {</span>
+<span class="cstat-no" title="statement not covered" >      return res.status(500).json({error: err});</span>
+    } 
+
 <span class="cstat-no" title="statement not covered" >    res.status(201).json(newTweet);</span>
   });
 });
 &nbsp;
 router.put('/:id', [
+
   check('tweet').isString().isLength({ min: 1, max: 120 })
 ], <span class="fstat-no" title="function not covered" >fu</span>nction (req, res, next) {
 <span class="cstat-no" title="statement not covered" >  Tweet.findOne({ _id: req.params.id }).exec(<span class="fstat-no" title="function not covered" >fu</span>nction (err, tweet) {</span>
+
+  check('tweet').isString().isLength({min: 1, max: 120})
+], checkValidation, <span class="fstat-no" title="function not covered" >fu</span>nction(req, res, next) {
+<span class="cstat-no" title="statement not covered" >  Tweet.findOne({_id: req.params.id}).exec(<span class="fstat-no" title="function not covered" >fu</span>nction(err, tweet) {</span>
+
 <span class="cstat-no" title="statement not covered" >    if (err) {</span>
 <span class="cstat-no" title="statement not covered" >      return res.status(500).json({</span>
         error: err,
@@ -313,15 +376,25 @@ router.put('/:id', [
       });
     }
 <span class="cstat-no" title="statement not covered" >    tweet.tweet = req.body.tweet;</span>
+
 <span class="cstat-no" title="statement not covered" >    tweet.save(<span class="fstat-no" title="function not covered" >fu</span>nction (err) {</span>
 <span class="cstat-no" title="statement not covered" >      if (err) <span class="cstat-no" title="statement not covered" >return res.status(500).json({ error: err });</span></span>
+
+<span class="cstat-no" title="statement not covered" >    tweet.save(<span class="fstat-no" title="function not covered" >fu</span>nction(err) {</span>
+<span class="cstat-no" title="statement not covered" >      if(err) <span class="cstat-no" title="statement not covered" >return res.status(500).json({error: err});</span></span>
+
 <span class="cstat-no" title="statement not covered" >      res.json(tweet);</span>
     });
   });
 });
 &nbsp;
+
 router.delete('/:id', <span class="fstat-no" title="function not covered" >fu</span>nction (req, res, next) {
 <span class="cstat-no" title="statement not covered" >  Tweet.findOne({ _id: req.params.id }).exec(<span class="fstat-no" title="function not covered" >fu</span>nction (err, tweet) {</span>
+
+router.delete('/:id', <span class="fstat-no" title="function not covered" >fu</span>nction(req, res, next) {
+<span class="cstat-no" title="statement not covered" >  Tweet.findOne({_id: req.params.id}).exec(<span class="fstat-no" title="function not covered" >fu</span>nction(err, tweet) {</span>
+
 <span class="cstat-no" title="statement not covered" >    if (err) {</span>
 <span class="cstat-no" title="statement not covered" >      return res.status(500).json({</span>
         error: err,
@@ -339,11 +412,19 @@ router.delete('/:id', <span class="fstat-no" title="function not covered" >fu</s
         message: "You are not the owner of the resource"
       });
     }
+
 <span class="cstat-no" title="statement not covered" >    Tweet.remove({ _id: req.params.id }, <span class="fstat-no" title="function not covered" >fu</span>nction (err) {</span>
 <span class="cstat-no" title="statement not covered" >      if (err) {</span>
 <span class="cstat-no" title="statement not covered" >        return res.status(500).json({ error: err })</span>
       }
 <span class="cstat-no" title="statement not covered" >      res.json({ message: 'Tweet successfully deleted' })</span>
+
+<span class="cstat-no" title="statement not covered" >    Tweet.remove({_id: req.params.id}, <span class="fstat-no" title="function not covered" >fu</span>nction(err) {</span>
+<span class="cstat-no" title="statement not covered" >      if(err) {</span>
+<span class="cstat-no" title="statement not covered" >        return res.status(500).json({error: err})</span>
+      }
+<span class="cstat-no" title="statement not covered" >      res.json({message: 'Tweet successfully deleted'})</span>
+
     });
   });
 });
@@ -355,7 +436,11 @@ module.exports = router;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
+
                 at Fri May 29 2020 19:11:08 GMT+0200 (Central European Summer Time)
+
+                at Sat May 30 2020 11:43:18 GMT+0200 (GMT+02:00)
+
             </div>
         </div>
         <script src="../../prettify.js"></script>

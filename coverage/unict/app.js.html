@@ -23,30 +23,54 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
+
                 <span class="strong">97.06% </span>
                 <span class="quiet">Statements</span>
                 <span class='fraction'>33/34</span>
+
+                <span class="strong">80.56% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>29/36</span>
+
             </div>
         
             
             <div class='fl pad1y space-right2'>
+
                 <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
                 <span class='fraction'>1/2</span>
+
+                <span class="strong">25% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>1/4</span>
+
             </div>
         
             
             <div class='fl pad1y space-right2'>
+
                 <span class="strong">75% </span>
                 <span class="quiet">Functions</span>
                 <span class='fraction'>3/4</span>
+
+                <span class="strong">25% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>1/4</span>
+
             </div>
         
             
             <div class='fl pad1y space-right2'>
+
                 <span class="strong">97.06% </span>
                 <span class="quiet">Lines</span>
                 <span class='fraction'>33/34</span>
+
+                <span class="strong">80.56% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>29/36</span>
+
             </div>
         
             
@@ -122,7 +146,16 @@
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
+
 <a name='L66'></a><a href='#L66'>66</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -138,6 +171,14 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+
+
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -173,15 +214,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -191,7 +243,11 @@
 const path = require('path');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+
 const cors = require("cors")
+
+const cors = require('cors')
+
 &nbsp;
 // Import base routes
 const indexRouter = require('./routes/index');
@@ -203,6 +259,13 @@ const host = 'localhost';
 const dbName = 'unict-innovation';
 &nbsp;
 const mongoose = require('mongoose');
+
+&nbsp;
+<span class="missing-if-branch" title="if path not taken" >I</span>if (process.env.NODE_ENV === 'test') {
+<span class="cstat-no" title="statement not covered" >  dbName = 'unict-innovation-test';</span>
+}
+&nbsp;
+
 mongoose.set('useCreateIndex', true);
 mongoose.connect('mongodb://'+ host + '/' + dbName);
 &nbsp;
@@ -237,6 +300,7 @@ app.use('/users', userRouter);
 app.use('/tweets', tweetRouter);
 &nbsp;
 // Catch 404 errors
+
 app.use(function(req, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
@@ -247,6 +311,17 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   res.status(err.status || <span class="branch-1 cbranch-no" title="branch not covered" >500)</span>;
   res.json({
+
+app.use(<span class="fstat-no" title="function not covered" >fu</span>nction(req, res, next) {
+  const err = <span class="cstat-no" title="statement not covered" >new Error('Not Found');</span>
+<span class="cstat-no" title="statement not covered" >  err.status = 404;</span>
+<span class="cstat-no" title="statement not covered" >  next(err);</span>
+});
+&nbsp;
+// Error handler
+app.use(<span class="fstat-no" title="function not covered" >fu</span>nction(err, req, res, next) {
+<span class="cstat-no" title="statement not covered" >  res.status(err.status || 500);</span>
+<span class="cstat-no" title="statement not covered" >  res.json({</span>
     message: err.message,
     error: err
   });
@@ -259,7 +334,11 @@ module.exports = app;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
+
                 at Fri May 29 2020 19:11:08 GMT+0200 (Central European Summer Time)
+
+                at Sat May 30 2020 11:43:18 GMT+0200 (GMT+02:00)
+
             </div>
         </div>
         <script src="../prettify.js"></script>

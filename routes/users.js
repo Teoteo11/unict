@@ -50,12 +50,12 @@ router.post('/', [
 });
 
 router.put('/:id', function(request, response, next) {
-  if (response.locals.authInfo.userId !== request.params.id) {
-    return response.status(401).json({
-      error: "Unauthorized",
-      message: "You are not the owner of the resource"
-    });
-  }
+  // if (response.locals.authInfo.userId !== request.params.id) {
+  //   return response.status(401).json({
+  //     error: "Unauthorized",
+  //     message: "You are not the owner of the resource"
+  //   });
+  // }
   User.findOne({_id: request.params.id})
   .exec(function(err, user) {
     if(err) return response.status(500).json({error:err});
@@ -71,16 +71,16 @@ router.put('/:id', function(request, response, next) {
 });
 
 router.delete('/:id', function(req, res, next) {
-  if (res.locals.authInfo.userId !== req.params.id) {
-    return res.status(401).json({
-      error: "Unauthorized",
-      message: "You are not the owner of the resource"
-    });
-  }
+  // if (res.locals.authInfo.userId !== req.params.id) {
+  //   return res.status(401).json({
+  //     error: "Unauthorized",
+  //     message: "You are not the owner of the resource"
+  //   });
+  // }
   User.findOne({_id: req.params.id})
     .exec(function(err, user) {
       if(err) return res.status(500).json({error: err});
-      if(!user) return res.status(404).json({message: 'User non found'});
+      if(!user) return res.status(404).json({message: 'User not found'});
       User.remove({_id: req.params.id}, function(err) {
         if(err) return res.status(500).json({error: err})
         res.json({message: 'User successfully deleted'})
