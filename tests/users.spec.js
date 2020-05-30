@@ -73,7 +73,7 @@ describe('[UPDATE] PUT: /users', () => {
       : console.log('Missing document');
   });
   it('Update an exist user inside database and return it', async () => {
-    const updatedUser = {
+    const updateUser = {
       name: 'Rosario',
       surname: 'Rossi',
       email: 'rosario@gmail.com',
@@ -81,7 +81,7 @@ describe('[UPDATE] PUT: /users', () => {
       crypto.createHash('sha256').update('testUnictNew', 'utf8').digest()
     ).toString('base64')
     };
-    const result = await chai.request(app).put(`/${createdUser._id.toString()}`).send(updatedUser);
+    const result = await chai.request(app).put(`/${createdUser._id.toString()}`).send(updateUser);
     expectJson(result);
     expect(createdUser).to.be.not.undefined;
     expect(result.status).to.be.equal(200);
