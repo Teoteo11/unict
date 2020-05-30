@@ -4,6 +4,7 @@ const expect = chai.expect;
 const crypto = require('crypto');
 const app = require('../app');
 const User = require('../models/user');
+const crypto = require('crypto');
 
 const mongoose = require('mongoose');
 chai.use(chaiHttp);
