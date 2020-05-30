@@ -1,13 +1,13 @@
 let mongoose = require("mongoose");
 let Tweet = require('../models/tweet');
-const should = chai.should();
-const chai = require('chai');
-const crypto = require('crypto');
-const chaiHttp = require('chai-http');
 const index = require('../routes/index')
-const expect = chai.expect;
 const app = require('../app')
 const User = require('../models/user');
+const crypto = require('crypto');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const should = chai.should();
+const expect = chai.expect;
 chai.use(chaiHttp);
 
 describe('Testing only negative responses for GETs of <<tweets>> route:\n', () => {
