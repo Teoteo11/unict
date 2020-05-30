@@ -46,3 +46,17 @@ describe('Testing only negative responses for GETs of <<tweets>> route:\n', () =
             });
     });
 });
+
+describe("Testing POST for Tweets:\n", () => {
+    it("Negative response with status 401 and json containing error message", (done) => {
+        chai.request(app)
+            .post('/tweets')
+            .send({ "tweet": "test 1 by matteoDC" })
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.body.should.be.a('object');
+                res.body.should.have.property('error');
+                done();
+            });
+    });
+});
