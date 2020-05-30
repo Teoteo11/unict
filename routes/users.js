@@ -80,7 +80,7 @@ router.delete('/:id', function(req, res, next) {
   User.findOne({_id: req.params.id})
     .exec(function(err, user) {
       if(err) return res.status(500).json({error: err});
-      if(!user) return res.status(404).json({message: 'User non found'});
+      if(!user) return res.status(404).json({message: 'User not found'});
       User.remove({_id: req.params.id}, function(err) {
         if(err) return res.status(500).json({error: err})
         res.json({message: 'User successfully deleted'})
