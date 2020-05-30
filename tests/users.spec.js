@@ -62,6 +62,52 @@ describe('[SHOW] GET: /users/:id', () => {
   });
 });
 
+describe('[UPDATE] PUT: /users', () => {
+  let createdUser = undefined;
+  beforeEach('Create user', async() => {
+    createdUser = await createUser();
+  })
+  afterEach('Delete user', async () => {
+    createdUser
+      ? await createdUser.remove()
+      : console.log('Missing document');
+  });
+  it('Update an exist user inside database and return it', async () => {
+    const updatedUser = {
+      name: 'Rosario',
+      surname: 'Rossi',
+      email: 'rosario@gmail.com',
+      password: new Buffer(
+      crypto.createHash('sha256').update('testUnictNew', 'utf8').digest()
+    ).toString('base64')
+    };
+    const result = await chai.request(app).put(`/${createdUser._id.toString()}`).send(updatedUser);
+    expectJson(result);
+    expect(createdUser).to.be.not.undefined;
+    expect(result.status).to.be.equal(200);
+
+    const updatedUser = await Users.findById(result.body._id);
+    expect(updatedUser).to.has.property('name', updateUser.name.toString());
+    expect(updatedUser).to.has.property('surname', updateUser.surname.toString());
+    expect(updatedUser).to.has.property('age', updateUser.age);
+    expect(updatedUser).to.has.property('email', updateUser.email.toString());
+  });
+
+  it('Validation error if email filed is not an email', async () => {
+    const newUser = {
+      name: 'Rosario',
+      surname: 'Rossi',
+      email: 'email',
+      password: new Buffer(
+      crypto.createHash('sha256').update('testUnictNew', 'utf8').digest()
+    ).toString('base64')
+    };
+    const result = await chai.request(app).post(`/${createdUser._id.toString()}`).send(newUser);
+    expectJson(result);
+    expect(result).to.has.property('status', 400);
+  });
+});
+
 describe('[DELETE] DELETE: /:id', () => {
   it('should return 404 status if user don\'t exists', async () => {
     const newObjectId = mongoose.Types.ObjectId();
