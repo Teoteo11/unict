@@ -1,3 +1,6 @@
+let mongoose = require("mongoose");
+let Tweet = require('../models/tweet');
+const should = chai.should();
 const chai = require('chai');
 const crypto = require('crypto');
 const chaiHttp = require('chai-http');
@@ -6,10 +9,6 @@ const expect = chai.expect;
 const app = require('../app')
 const User = require('../models/user');
 chai.use(chaiHttp);
-
-let mongoose = require("mongoose");
-let Tweet = require('../models/tweet');
-const should = chai.should();
 
 describe('Testing only negative responses for GETs of <<tweets>> route:\n', () => {
     it('GET: it should get an empty array and status 200', (done) => {
