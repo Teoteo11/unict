@@ -10,10 +10,7 @@ chai.use(chaiHttp);
 const {expectJson, createUser} = require('./utils/index');
 
 const expectedNotFoundError = {
-  error: {
-    'status':404
-  },
-  message: 'Not Found'
+  message: 'User not found'
 };
 
 describe('[INDEX] GET /users/', () => {
@@ -66,7 +63,7 @@ describe('[SHOW] GET: /users/:id', () => {
 });
 
 describe('[DELETE] DELETE: /:id', () => {
-  it.skip('should return 404 status if user don\'t exists', async () => {
+  it('should return 404 status if user don\'t exists', async () => {
     const newObjectId = mongoose.Types.ObjectId();
     const result = await chai.request(app)
         .delete(`/users/${newObjectId}`);
