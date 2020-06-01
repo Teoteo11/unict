@@ -34,6 +34,7 @@ router.post('/', [
   newTweet._author = res.locals.authInfo.userId;
   newTweet.save(function (err) {
     if (err) {
+      console.log(err)
       return res.status(500).json({ error: err });
     }
     res.status(201).json(newTweet);
