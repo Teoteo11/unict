@@ -23,18 +23,12 @@ describe('[INDEX] GET /users/', () => {
     expect(result.body).to.have.lengthOf(0);
   });
   describe('User inside DB', () => {
-    const newUser = {
-      name: 'Roberto',
-      surname: 'Bianchi',
-      email: 'roberto.bianchi@gmail.com',
-      password: 'robertotheking'
-    };
-    let createdUser = undefined;
+    let user = undefined;
     before('Create user in db', async () => {
-      createdUser = await User.create(newUser);
+      user = await createUser()
     });
     after('Remove created user', async () => {
-      await User.deleteMany();
+      user ? user.remove() : console.log('User does not exist');
     });
 
     it('Return expected user from DB ', async () => {
@@ -45,7 +39,7 @@ describe('[INDEX] GET /users/', () => {
       expect(result.body).to.have.lengthOf(1);
     });
     it('Return expected user from db', async () => {
-      const result = await chai.request(app).get(`/users/${createdUser.id.toString()}`);
+      const result = await chai.request(app).get(`/users/${user.id.toString()}`);
       expect(result.header).to.have.property('content-type');
       expect(result.header['content-type']).contains('application/json');
     });
@@ -63,14 +57,12 @@ describe('[SHOW] GET: /users/:id', () => {
 });
 
 describe('[UPDATE] PUT: /users', () => {
-  let createdUser = undefined;
-  beforeEach('Create user', async() => {
-    createdUser = await createUser();
+  let user = undefined;
+  before('Create user', async() => {
+    user = await createUser();
   })
-  afterEach('Delete user', async () => {
-    createdUser
-      ? await createdUser.remove()
-      : console.log('Missing document');
+  after('Delete user', async () => {
+    user ? await user.remove() : console.log('Missing document');
   });
   it('Update an exist user inside database and return it', async () => {
     const updateUser = {
@@ -79,9 +71,9 @@ describe('[UPDATE] PUT: /users', () => {
       email: 'rosario@gmail.com',
       password: 'testUnictNew'
     };
-    const result = await chai.request(app).put(`/users/${createdUser._id.toString()}`).send(updateUser);
+    const result = await chai.request(app).put(`/users/${user._id.toString()}`).send(updateUser);
     expectJson(result);
-    expect(createdUser).to.be.not.undefined;
+    expect(user).to.be.not.undefined;
     expect(result.status).to.be.equal(200);
 
     const updatedUser = await User.findById(result.body._id);
@@ -112,16 +104,12 @@ describe('[DELETE] DELETE: /:id', () => {
     expect(result.body).to.be.deep.equals(expectedNotFoundError);
   });
   describe('With an existing user', () => {
-    let createdUser = undefined;
+    let user = undefined;
     beforeEach('create user', async () => {
-      createdUser = await createUser();
-    });
-    afterEach('delete user', () => {
-      createdUser ? createdUser.remove() : console.log('missing user');
+      user = await createUser();
     });
     it('Delete existing user', async () => {
-      const result = await chai.request(app)
-          .delete(`/users/${createdUser._id.toString()}`);
+      const result = await chai.request(app).delete(`/users/${user._id}`);
       expect(result).to.have.property('status', 200);
       expect(result).to.have.property('body');
       expect(result.body).to.be.deep.equals({message: 'User successfully deleted'})
@@ -135,18 +123,18 @@ describe('[CREATE] POST: /users/', () => {
     email: 'peppe.grasso@gmail.com',
     password: 'giuseppeunict'
   }
-  let createdUserId = undefined;
+  let userId = undefined;
   after('delete user', async () => {
-    createdUserId ? await User.findByIdAndDelete(createdUserId) : console.log('Missing user id');
+    userId ? await User.findByIdAndDelete(userId) : console.log('Missing user id');
   });
   it('Create a new user inside database', async () => {
     const result = await chai.request(app).post('/users/').send(newUser);
     expect(result.header).to.have.property('content-type');
     expect(result.header['content-type']).contains('application/json');
     expect(result.body).to.have.property('_id');
-    createdUserId = result.body._id;
+    userId = result.body._id;
     expect(result).to.have.status(201);
-    expect(createdUserId).to.not.equal(undefined);
+    expect(userId).to.not.equal(undefined);
     expect(result.body).to.have.property('name', newUser.name);
     expect(result.body).to.have.property('surname', newUser.surname);
     expect(result.body).to.have.property('email', newUser.email);
