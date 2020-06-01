@@ -2,27 +2,20 @@ const chai = require('chai');
 const crypto = require('crypto');
 const chaiHttp = require('chai-http');
 const index = require('../routes/index')
+const {expectJson, createUser} = require('./utils/index');
 const expect = chai.expect;
 const app = require('../app')
 const User = require('../models/user');
 chai.use(chaiHttp);
 
 describe('[POST] /login', () => {
-    const psw = 'giuseppeunict';
-    const newUser = {
-        name: 'Giuseppe',
-        surname: 'Grasso',
-        email: 'peppe.grasso@gmail.com',
-        password: new Buffer(
-                crypto.createHash('sha256').update(psw, 'utf8').digest()
-            ).toString('base64')
-    }
+    let user = undefined;
     before('Create user in db', async () => {
-        await User.create(newUser);
+        user = await createUser()
     });
 
-    after('delete user', async () => {
-        await User.deleteMany();
+    after('Remove created user', async () => {
+        user ? user.remove() : console.log('User does not exist');
     });
 
     it('User login data not found', async () => {
@@ -39,8 +32,8 @@ describe('[POST] /login', () => {
 
     it('Login user successiful', async () => {
         const loginUser = {
-            email: 'peppe.grasso@gmail.com',
-            password: psw
+            email: 'fabrizio@gmail.com',
+            password: 'testUnict'
         }
         const result = await chai.request(app).post('/login').send(loginUser);
         expect(result.header).to.have.property('content-type');

@@ -1,6 +1,8 @@
 let mongoose = require("mongoose");
 let Tweet = require('../models/tweet');
-const index = require('../routes/index')
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = "secret";
+const create = require('./utils/index')
 const app = require('../app')
 const User = require('../models/user');
 const crypto = require('crypto');
@@ -47,16 +49,23 @@ describe('Testing only negative responses for GETs of <<tweets>> route:\n', () =
     });
 });
 
-describe("Testing POST for Tweets:\n", () => {
-    it("Negative response with status 401 and json containing error message", (done) => {
-        chai.request(app)
-            .post('/tweets')
-            .send({ "tweet": "test 1 by matteoDC" })
-            .end((err, res) => {
-                res.should.have.status(500);
-                res.body.should.be.a('object');
-                res.body.should.have.property('error');
-                done();
-            });
+
+describe('[CREATE] POST: /', () => {
+    let user = undefined;
+    let accessToken = undefined;
+    const messagePayload = {
+        tweet: 'Hello world'
+    }
+    before('Set access token on local storage and create user', async () => {
+        user = await create.createUser();
+        accessToken = jwt.sign({userId: user._id}, JWT_SECRET, {expiresIn: "1 hour"});
+    });
+    after('Remove created user', async () => {
+        user ? user.remove() : console.log('User does not exist');
+    });
+    it('Should create a new tweet', async () => {
+        const result = await chai.request(app).post('/tweets/').set("Authorization", `Bearer ${accessToken}`).send(messagePayload);
+        expect(result.status).to.equal(201);
     });
 });
+
